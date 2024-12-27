@@ -1,0 +1,46 @@
+name: Deploy Angular to GitHub Pages
+
+on:
+ push:
+  branches:
+   - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+  
+    steps:
+    - uses: actions/checkout@v2
+  
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+  
+    - name: Install Angular CLI
+      run: npm install -g @angular/cli
+  
+    - name: Install dependencies
+      run: npm install
+  
+    - name: Build Angular
+      run: npm build -- --configuration production --base-href /${{ github.event.repository.name}}/
+  
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path='dist/${{github.event.repository.name}}/browser/.'
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: 'https://${{github.repository_owner}}.github.io/${{github.event.respository.name}}/'
+    steps:
+      - name: Setup pages
+        uses: actions/configure-pages@v5
+      - name: Deploy
+        uses: actions/deploy-pages@v4
