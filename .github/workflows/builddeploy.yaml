@@ -23,7 +23,7 @@ jobs:
       run: npm install
   
     - name: Build Angular
-      run: npm build -- --configuration production --base-href /${{ github.event.repository.name}}/
+      run: ng build -- --configuration production --base-href /${{ github.event.repository.name}}/
   
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v3
