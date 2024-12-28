@@ -22,13 +22,10 @@ jobs:
     - name: Install dependencies
       run: npm install
   
-    - name: Build Angular
-      run: ng build --configuration production --base-href /${{ github.event.repository.name }}/ --output-path ./dist/${{github.event.repository.name}}
-  
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: "/dist/${{github.event.repository.name}}"
+    - name: Build project
+      run: npm run build -- --configuration=github-pages
+      working-directory: ./ng-zero-app
+
   deploy:
     needs: build
     runs-on: ubuntu-latest
