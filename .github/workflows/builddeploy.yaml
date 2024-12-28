@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
   
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
   
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -17,14 +17,18 @@ jobs:
         node-version: '20'
   
     - name: Install Angular CLI
-      run: npm install -g @angular/cli
+      run: npm ci
   
     - name: Install dependencies
       run: npm install
   
     - name: Build project
-      run: npm run build -- --configuration=github-pages
+      run: npm run build --configuration=production --base-href=/${{github.event.repository.name}}/
 
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: 'dist/${{github.event.repository.name}}/browser/.'
   deploy:
     needs: build
     runs-on: ubuntu-latest
