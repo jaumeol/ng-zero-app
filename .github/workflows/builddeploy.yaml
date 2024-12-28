@@ -24,7 +24,6 @@ jobs:
   
     - name: Build project
       run: npm run build -- --configuration=github-pages
-      working-directory: ng-zero-app
 
   deploy:
     needs: build
